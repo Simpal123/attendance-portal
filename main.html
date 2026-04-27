@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Portal</title>
+    <link rel="stylesheet" href="new.css">
+</head>
+<body>
+
+<header>
+    <h1>Online Attendance Portal</h1>
+</header>
+
+<div class="container">
+
+    <!-- Teacher Section -->
+    <div class="card">
+        <h2>Teacher Panel</h2>
+
+        <h3>Add Student</h3>
+        <input type="text" placeholder="Student Name">
+        <input type="text" placeholder="Student ID">
+        <button>Add Student</button>
+
+        <h3>Mark Attendance</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Present</th>
+                <th>Absent</th>
+            </tr>
+
+            <tr>
+                <td>101</td>
+                <td>Rahul</td>
+                <td><button class="present-btn">✔</button></td>
+                <td><button class="absent-btn">✖</button></td>
+            </tr>
+
+            <tr>
+                <td>102</td>
+                <td>Priya</td>
+                <td><button class="present-btn">✔</button></td>
+                <td><button class="absent-btn">✖</button></td>
+            </tr>
+
+        </table>
+    </div>
+
+    <!-- Student Login -->
+    <div class="card">
+        <h2>Student Login</h2>
+
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Serial Number">
+        <button>Login</button>
+    </div>
+
+    <!-- Student Dashboard -->
+    <div class="card">
+        <h2>Student Dashboard</h2>
+
+        <p><strong>Name:</strong> Rahul Sharma</p>
+        <p><strong>ID:</strong> 101</p>
+
+        <div class="attendance-box">
+            <h3>Attendance</h3>
+            <p>Present: 18 Days</p>
+            <p>Total: 20 Days</p>
+            <p class="percentage">90%</p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
