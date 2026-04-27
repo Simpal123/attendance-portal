@@ -1,77 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Attendance Portal</title>
-    <link rel="stylesheet" href="new.css">
+<meta charset="UTF-8">
+<title>Attendance Portal</title>
+
+<style>
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #eef2f7;
+}
+
+header {
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+.container {
+    width: 90%;
+    margin: 20px auto;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+}
+
+input {
+    display: block;
+    width: 95%;
+    padding: 10px;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2980b9;
+}
+
+table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+table th {
+    background: #3498db;
+    color: white;
+}
+
+.present-btn {
+    background: green;
+}
+
+.absent-btn {
+    background: red;
+}
+
+.attendance-box {
+    text-align: center;
+    background: #f4f6f9;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.percentage {
+    font-size: 24px;
+    color: green;
+    font-weight: bold;
+}
+</style>
+
 </head>
 <body>
+
 <header>
-    <h1>Online Attendance Portal</h1>
+<h1>Online Attendance Portal</h1>
 </header>
 
 <div class="container">
 
-    <!-- Teacher Section -->
-    <div class="card">
-        <h2>Teacher Panel</h2>
+<!-- Teacher Panel -->
+<div class="card">
+<h2>Teacher Panel</h2>
 
-        <h3>Add Student</h3>
-        <input type="text" placeholder="Student Name">
-        <input type="text" placeholder="Student ID">
-        <button>Add Student</button>
+<input type="text" id="name" placeholder="Student Name">
+<input type="text" id="id" placeholder="Student ID">
+<button onclick="addStudent()">Add Student</button>
 
-        <h3>Mark Attendance</h3>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Present</th>
-                <th>Absent</th>
-            </tr>
+<table id="studentTable">
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Present</th>
+<th>Absent</th>
+</tr>
+</table>
+</div>
 
-            <tr>
-                <td>101</td>
-                <td>Rahul</td>
-                <td><button class="present-btn">✔</button></td>
-                <td><button class="absent-btn">✖</button></td>
-            </tr>
+<!-- Student Login -->
+<div class="card">
+<h2>Student Login</h2>
 
-            <tr>
-                <td>102</td>
-                <td>Priya</td>
-                <td><button class="present-btn">✔</button></td>
-                <td><button class="absent-btn">✖</button></td>
-            </tr>
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="userId" placeholder="Serial Number">
+<button onclick="login()">Login</button>
+</div>
 
-        </table>
-    </div>
+<!-- Student Dashboard -->
+<div class="card" id="dashboard" style="display:none;">
+<h2>Student Dashboard</h2>
 
-    <!-- Student Login -->
-    <div class="card">
-        <h2>Student Login</h2>
+<p id="studentInfo"></p>
 
-        <input type="text" placeholder="Username">
-        <input type="password" placeholder="Serial Number">
-        <button>Login</button>
-    </div>
-
-    <!-- Student Dashboard -->
-    <div class="card">
-        <h2>Student Dashboard</h2>
-
-        <p><strong>Name:</strong> Rahul Sharma</p>
-        <p><strong>ID:</strong> 101</p>
-
-        <div class="attendance-box">
-            <h3>Attendance</h3>
-            <p>Present: 18 Days</p>
-            <p>Total: 20 Days</p>
-            <p class="percentage">90%</p>
-        </div>
-    </div>
+<div class="attendance-box">
+<h3>Attendance</h3>
+<p id="presentCount"></p>
+<p id="totalCount"></p>
+<p class="percentage" id="percentage"></p>
+</div>
+</div>
 
 </div>
+
+<script>
+let students = [];
+
+// Add Student
+function addStudent() {
+    let name = document.getElementById("name").value;
+    let id = document.getElementById("id").value;
+
+    if (name === "" || id === "") {
+        alert("Enter details");
+        return;
+    }
+
+    students.push({ id, name, present: 0, total: 0 });
+    displayStudents();
+}
+
+// Display Students
+function displayStudents() {
+    let table = document.getElementById("studentTable");
+
+    table.innerHTML = `
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Present</th>
+        <th>Absent</th>
+    </tr>`;
+
+    students.forEach((s, index) => {
+        table.innerHTML += `
+        <tr>
+            <td>${s.id}</td>
+            <td>${s.name}</td>
+            <td><button class="present-btn" onclick="markPresent(${index})">✔</button></td>
+            <td><button class="absent-btn" onclick="markAbsent(${index})">✖</button></td>
+        </tr>`;
+    });
+}
+
+// Mark Present
+function markPresent(index) {
+    students[index].present++;
+    students[index].total++;
+    alert("Marked Present");
+}
+
+// Mark Absent
+function markAbsent(index) {
+    students[index].total++;
+    alert("Marked Absent");
+}
+
+// Login
+function login() {
+    let username = document.getElementById("username").value;
+    let id = document.getElementById("userId").value;
+
+    let student = students.find(s => s.name === username && s.id == id);
+
+    if (student) {
+        document.getElementById("dashboard").style.display = "block";
+
+        document.getElementById("studentInfo").innerText =
+            "Name: " + student.name + " | ID: " + student.id;
+
+        document.getElementById("presentCount").innerText =
+            "Present: " + student.present;
+
+        document.getElementById("totalCount").innerText =
+            "Total: " + student.total;
+
+        let percent = student.total === 0 ? 0 :
+            ((student.present / student.total) * 100).toFixed(2);
+
+        document.getElementById("percentage").innerText =
+            percent + "%";
+    } else {
+        alert("Invalid Login");
+    }
+}
+</script>
 
 </body>
 </html>
